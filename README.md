@@ -1,2 +1,2 @@
-# immortal-tests-ui
-This Repo for UI automation tests
+# automation-immortalv
+ Immortalv automation tests
