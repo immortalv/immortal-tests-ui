@@ -14,7 +14,6 @@ public class LoggerWrapper {
         log.info(message);
     }
 
-
     public static void debug(String message) {
         log.debug(message);
     }
