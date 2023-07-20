@@ -1,10 +1,10 @@
-package immortlv.automationimmortalv;
+package immortlv;
 
-import immortlv.automationimmortalv.utils.WebDriverWrapper;
+import immortlv.utils.WebDriverWrapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import static immortlv.automationimmortalv.utils.Constants.IMMORTAL_URL_STAGE;
+import static immortlv.utils.Constants.IMMORTAL_URL_STAGE;
 
 @SpringBootApplication
 public class AutomationImmortalvApplication {

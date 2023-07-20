@@ -1,4 +1,4 @@
-package immortlv.automationimmortalv.utils;
+package immortlv.utils;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -7,7 +7,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.util.HashMap;
 import java.util.Map;
 
-import static immortlv.automationimmortalv.utils.LoggerWrapper.info;
+import static immortlv.utils.LoggerWrapper.info;
 
 public class WebDriverWrapper {
     private RemoteWebDriver driver;

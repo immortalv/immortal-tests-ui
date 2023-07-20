@@ -1,4 +1,4 @@
-package immortlv.automationimmortalv;
+package immortlv;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

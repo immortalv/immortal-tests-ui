@@ -1,4 +1,4 @@
-package immortlv.automationimmortalv.utils;
+package immortlv.utils;
 
 public class Constants {
     public final static String IMMORTAL_URL_STAGE = "https://develop.immortalv.com/";
