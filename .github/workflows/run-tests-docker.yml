@@ -2,13 +2,14 @@ name: Run Immortal UI tests Docker
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "master" ]
   schedule:
     - cron: '0 0 * * *' # Daily schedule at midnight UTC
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
