@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  selenium-hub-chrome:
+    image: selenium/standalone-chrome
+    container_name: selenium-hub-chrome
+    ports:
+      - "4446:4444"
+    volumes:
+      - /dev/shm:/dev/shm
+
+  tests_container:
+    image: tests_image
+    build:
+      context: .
+    container_name: tests_container
+    depends_on: [selenium-hub-chrome]
+    command: ./gradlew bootRun
