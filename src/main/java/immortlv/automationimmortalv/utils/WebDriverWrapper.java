@@ -19,7 +19,7 @@ public class WebDriverWrapper {
 
     public RemoteWebDriver getDriver() {
         if (driver == null) {
-            driver = initializeRemoteChromeDriver(SELENIUM_GRID_URL);
+            driver = initializeLocalChromeDriver();
         }
         return driver;
     }
