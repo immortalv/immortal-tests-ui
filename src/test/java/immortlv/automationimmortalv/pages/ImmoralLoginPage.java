@@ -1,4 +1,4 @@
 package immortlv.automationimmortalv.pages;
 
-public class HomePage {
+public class ImmoralLoginPage {
 }
