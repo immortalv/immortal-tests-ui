@@ -33,7 +33,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.awaitility/awaitility
     implementation 'org.awaitility:awaitility:3.0.0'
     implementation 'org.testng:testng:6.14.3'
-    testImplementation 'org.awaitility:awaitility:3.0.0'
+    implementation 'org.awaitility:awaitility:3.0.0'
+
+// https://mvnrepository.com/artifact/org.assertj/assertj-core
+    testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 tasks.named('test') {
