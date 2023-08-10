@@ -8,6 +8,7 @@ public class Constants {
     public final static String OUTLOOK_USER_PASS = "romainvicta!SPQR123";
 
     //TEST DATA
+    public final static String PROFILE_USER_FULL_NAME = "Testerenko Tester Testovich";
     public final static String PROFILE_USER_NAME = "Tester";
     public final static String PROFILE_LAST_NAME = "Testerenko";
     public final static String PROFILE_FATHERS_NAME = "Testovich";

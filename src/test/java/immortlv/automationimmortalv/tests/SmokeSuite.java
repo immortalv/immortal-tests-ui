@@ -83,19 +83,8 @@ public class SmokeSuite extends BasicTestSuite {
                 .setDefaultYearsOfWar();
 
         ImmortalCabinetPage cabinetPage = createProfilePage.clickCreateProfile();
-        cabinetPage.getAllUserProfiles();
-
-    }
-
-    @Test
-    public void verifyProfileModeration() {
-        ImmortalHomePage homePage = openImmortalWebsite();
-
-        info("Verify Home page");
-        homePage.verifyHeaderIsDisplayed();
-        homePage.loginAsAUser();
-
-
+        cabinetPage.closeProfileCreatedModal();
+        cabinetPage.verifyProfileIsCreated(PROFILE_USER_FULL_NAME);
     }
 
 }
