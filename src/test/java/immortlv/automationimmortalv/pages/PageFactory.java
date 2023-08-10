@@ -5,6 +5,8 @@ public class PageFactory {
     private ImmortalLoginPage loginPage;
     private ImmortalProfilesPage profilesPage;
     private ImmortalCabinetPage cabinetPage;
+    private ImmortalCreateProfilePage createProfilePage;
+    private ImmortalEditProfilePage editProfilePage;
 
     public ImmortalHomePage getHomePage() {
         if (homePage == null) {
@@ -20,6 +22,22 @@ public class PageFactory {
         }
         profilesPage.waitUntilPageIsLoaded();
         return profilesPage;
+    }
+
+    public ImmortalCreateProfilePage getCreateProfilePage() {
+        if (createProfilePage == null) {
+            createProfilePage = new ImmortalCreateProfilePage();
+        }
+        createProfilePage.waitUntilPageIsLoaded();
+        return createProfilePage;
+    }
+
+    public ImmortalEditProfilePage getEditProfilePage() {
+        if (editProfilePage == null) {
+            editProfilePage = new ImmortalEditProfilePage();
+        }
+        editProfilePage.waitUntilPageIsLoaded();
+        return editProfilePage;
     }
 
     public ImmortalLoginPage getLoginPage() {
