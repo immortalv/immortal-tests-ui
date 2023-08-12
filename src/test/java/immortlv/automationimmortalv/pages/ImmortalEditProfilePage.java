@@ -29,7 +29,7 @@ public class ImmortalEditProfilePage extends ImmortalBasePage {
     //Buttons
     private final String DELETE_BUTTON = "/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/form[1]/div[5]/button[1]";
     private final String SAVE_BUTTON = "/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/form[1]/div[5]/button[2]";
-
+    private final String CREATE_PROFILE_BUTTON = "(//button[@type='submit'])[1]";
 
     public ImmortalEditProfilePage setName(String name) {
         info(String.format("Set Name: \"%s\"", name));
@@ -117,16 +117,22 @@ public class ImmortalEditProfilePage extends ImmortalBasePage {
         return this;
     }
 
-     ImmortalEditProfilePage clickSave() {
+    ImmortalEditProfilePage clickSave() {
         info("Click Save");
         driverWrapper.clickElement(SAVE_BUTTON);
         return this;
     }
 
-     ImmortalEditProfilePage clickDelete() {
+    ImmortalEditProfilePage clickDelete() {
         info("Click Delete");
         driverWrapper.clickElement(DELETE_BUTTON);
         return this;
+    }
+
+    public ImmortalCabinetPage clickSaveButton() {
+        info("Click Create Profile");
+        driverWrapper.clickElement(CREATE_PROFILE_BUTTON);
+        return pageFactory.getCabinetPage();
     }
 
 }

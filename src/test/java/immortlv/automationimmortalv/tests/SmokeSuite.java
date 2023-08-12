@@ -4,6 +4,7 @@ import immortlv.automationimmortalv.pages.ImmortalCabinetPage;
 import immortlv.automationimmortalv.pages.ImmortalCreateProfilePage;
 import immortlv.automationimmortalv.pages.ImmortalHomePage;
 import immortlv.automationimmortalv.pages.ImmortalProfilesPage;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 import static immortlv.automationimmortalv.pages.ImmortalBasePage.openImmortalWebsite;
@@ -82,9 +83,53 @@ public class SmokeSuite extends BasicTestSuite {
                 .setNickName(PROFILE_NICK_NAME)
                 .setDefaultYearsOfWar();
 
-        ImmortalCabinetPage cabinetPage = createProfilePage.clickCreateProfile();
+        ImmortalCabinetPage cabinetPage = createProfilePage.clickSaveButton();
         cabinetPage.closeProfileCreatedModal();
         cabinetPage.verifyProfileIsCreated(PROFILE_USER_FULL_NAME);
+
+        cabinetPage.deleteProfile(PROFILE_USER_FULL_NAME);
+    }
+
+    @Test
+    public void verifyProfileEdition() {
+        ImmortalHomePage homePage = openImmortalWebsite();
+
+        homePage.verifyHeaderIsDisplayed();
+        homePage.loginAsAUser();
+        ImmortalCreateProfilePage createProfilePage = homePage.clickSaveMemory();
+
+        createProfilePage
+                .setName(PROFILE_USER_NAME)
+                .setLastname(PROFILE_LAST_NAME)
+                .setFathersname(PROFILE_FATHERS_NAME)
+                .setFavoriteQuote(PROFILE_FAVORITE_QUOTE)
+                .setBiography(PROFILE_BIOGRAPHY);
+
+        createProfilePage.clickProfileForMilitaryCheckbox()
+                .setDivisionName(PROFILE_DIVISION)
+                .setNameOfWar(PROFILE_WAR_NAME)
+                .setPositionName(PROFILE_POSITION_NAME)
+                .setRankName(PROFILE_RANK_NAME)
+                .setNickName(PROFILE_NICK_NAME)
+                .setDefaultYearsOfWar();
+
+        ImmortalCabinetPage cabinetPage = createProfilePage.clickSaveButton();
+        cabinetPage.closeProfileCreatedModal();
+        cabinetPage.verifyProfileIsCreated(PROFILE_USER_FULL_NAME);
+
+
+        cabinetPage.clickUserProfileEditButton(PROFILE_USER_FULL_NAME)
+                .setName(PROFILE_USER_EDITED_NAME)
+                .clickSaveButton();
+        cabinetPage.closeProfileCreatedModal();
+        cabinetPage.verifyProfileIsCreated(PROFILE_USER_EDITED_FULL_NAME);
+        cabinetPage.deleteProfile(PROFILE_USER_EDITED_FULL_NAME);
+    }
+
+
+    @AfterTest
+    public void deleteAllProfilesForUser() {
+
     }
 
 }

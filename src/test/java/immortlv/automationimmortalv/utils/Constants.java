@@ -9,7 +9,9 @@ public class Constants {
 
     //TEST DATA
     public final static String PROFILE_USER_FULL_NAME = "Testerenko Tester Testovich";
+    public final static String PROFILE_USER_EDITED_FULL_NAME = "Testerenko NewTester Testovich";
     public final static String PROFILE_USER_NAME = "Tester";
+    public final static String PROFILE_USER_EDITED_NAME = "NewTester";
     public final static String PROFILE_LAST_NAME = "Testerenko";
     public final static String PROFILE_FATHERS_NAME = "Testovich";
     public final static String PROFILE_FAVORITE_QUOTE = "We will fix it on Production";

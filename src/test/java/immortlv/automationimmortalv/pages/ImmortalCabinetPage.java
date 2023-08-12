@@ -12,16 +12,21 @@ import static immortlv.automationimmortalv.utils.LoggerWrapper.info;
 public class ImmortalCabinetPage extends ImmortalBasePage {
     private final String PROFILES_LIST = "/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]/div";
 
-    public static String getAllUserProfileName(WebElement profile) {
+    public static void clickUserProfileOrderTableButton(WebElement profile) {
+        profile.findElements(By.tagName("a")).get(3).click();
+    }
+
+    public String getAllUserProfileName(WebElement profile) {
         return profile.findElements(By.tagName("a")).get(1).getText();
     }
 
-    public static void clickUserProfileEditButton(WebElement profile) {
+    public ImmortalEditProfilePage clickUserProfileEditButton(WebElement profile) {
         profile.findElements(By.tagName("a")).get(2).click();
+        return pageFactory.getEditProfilePage();
     }
 
-    public static void clickUserProfileOrderTableButton(WebElement profile) {
-        profile.findElements(By.tagName("a")).get(3).click();
+    public ImmortalEditProfilePage clickUserProfileEditButton(String profileName) {
+       return clickUserProfileEditButton(getProfileByName(profileName));
     }
 
     public List<WebElement> getAllUserProfiles() {
@@ -36,10 +41,20 @@ public class ImmortalCabinetPage extends ImmortalBasePage {
         return profileListNames;
     }
 
+    public WebElement getProfileByName(String name) {
+        return getAllUserProfiles().stream().filter(profile -> getAllUserProfileName(profile).equals(name)).findFirst().orElseThrow();
+    }
+
     public ImmortalCabinetPage verifyProfileIsCreated(String profileName) {
         List<String> actualProfileListNames = getAllUserProfilesNames();
         AssertWrapper.assertTrue(actualProfileListNames.contains(profileName), profileName, Arrays.toString(actualProfileListNames.toArray()),
                 String.format("Verify that actual created profile list \"%s\" contains profile with name \"%s\"", Arrays.toString(actualProfileListNames.toArray()), profileName));
+        return this;
+    }
+
+    public ImmortalCabinetPage deleteProfile(String profileName) {
+        clickUserProfileEditButton(getProfileByName(profileName)).clickDelete();
+        closeProfileDeletedModal();
         return this;
     }
 
