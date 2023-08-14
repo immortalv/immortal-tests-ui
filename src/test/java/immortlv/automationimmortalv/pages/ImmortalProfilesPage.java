@@ -24,8 +24,8 @@ public class ImmortalProfilesPage extends ImmortalBasePage {
 
     public ImmortalProfilesPage verifyAllProfilesAreDisplayed() {
         Integer expectedProfilesAmount = 24;
-        driverWrapper.waitForElement(PROFILES_ON_PAGE_CONTAINER);
-        Integer actualProfilesAmount = driverWrapper.getDriver().findElements(By.xpath(ALL_PROFILES_ON_PAGE)).size();
+        getDriverWrapper().waitForElement(PROFILES_ON_PAGE_CONTAINER);
+        Integer actualProfilesAmount = getDriverWrapper().getDriver().findElements(By.xpath(ALL_PROFILES_ON_PAGE)).size();
         assertTrue(expectedProfilesAmount == actualProfilesAmount, expectedProfilesAmount.toString(), actualProfilesAmount.toString(),
                 "Verify that on current \"Profiles\" page - 24 profiles are displayed");
         return this;
@@ -33,20 +33,20 @@ public class ImmortalProfilesPage extends ImmortalBasePage {
 
     public ImmortalProfilesPage clickRightPaginationArrow() {
         info("Click Right Pagination Arrow");
-        driverWrapper.clickElement(RIGHT_ARROW);
+        getDriverWrapper().clickElement(RIGHT_ARROW);
         return this;
     }
 
     public ImmortalProfilesPage clickLeftPaginationArrow() {
         info("Click Left Pagination Arrow");
-        driverWrapper.clickElement(LEFT_ARROW);
+        getDriverWrapper().clickElement(LEFT_ARROW);
         return this;
     }
 
     public ImmortalProfilesPage searchProfile(String searchData) {
         info(String.format("Search profile with \"%s\"", searchData));
-        driverWrapper.inputText(SEARCH_FIELD, searchData);
-        driverWrapper.waitForElement(PROFILES_ON_PAGE_CONTAINER);
+        getDriverWrapper().inputText(SEARCH_FIELD, searchData);
+        getDriverWrapper().waitForElement(PROFILES_ON_PAGE_CONTAINER);
         return this;
     }
 
@@ -60,8 +60,8 @@ public class ImmortalProfilesPage extends ImmortalBasePage {
 
     public List<String> getDisplayedProfilesNames() {
         info("Get Displayed Profiles Names");
-        driverWrapper.waitForElement(PROFILES_ON_PAGE_CONTAINER);
-        List<String> displayedProfileNames = driverWrapper.getDriver().findElements(By.xpath(ALL_PROFILES_ON_PAGE)).stream().map(profile -> profile.getText()).toList();
+        getDriverWrapper().waitForElement(PROFILES_ON_PAGE_CONTAINER);
+        List<String> displayedProfileNames = getDriverWrapper().getDriver().findElements(By.xpath(ALL_PROFILES_ON_PAGE)).stream().map(profile -> profile.getText()).toList();
         return displayedProfileNames;
     }
 }

@@ -9,4 +9,4 @@ WORKDIR /immortal-tests-ui
 COPY . /immortal-tests-ui
 
 # Run the Gradle build inside the container
-CMD ./gradlew build
+CMD ./gradlew test

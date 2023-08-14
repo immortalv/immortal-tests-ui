@@ -30,7 +30,7 @@ public class ImmortalCabinetPage extends ImmortalBasePage {
     }
 
     public List<WebElement> getAllUserProfiles() {
-        List<WebElement> profilesList = driverWrapper.getDriver().findElements(By.xpath(PROFILES_LIST));
+        List<WebElement> profilesList = getDriverWrapper().getDriver().findElements(By.xpath(PROFILES_LIST));
         return profilesList;
     }
 
@@ -60,13 +60,13 @@ public class ImmortalCabinetPage extends ImmortalBasePage {
 
     public ImmortalCabinetPage closeProfileCreatedModal() {
         info("Close Profile Created Modal");
-        driverWrapper.findElement("//button[contains(@class,'CloseButton-root mantine-Modal-close')][1]").findElement(By.tagName("svg")).click();
+        getDriverWrapper().findElement("//button[contains(@class,'CloseButton-root mantine-Modal-close')][1]").findElement(By.tagName("svg")).click();
         return this;
     }
 
     public ImmortalCabinetPage closeProfileDeletedModal() {
         info("Close Profile Deleted Modal");
-        driverWrapper.findElement("//button[contains(@class,'CloseButton-root mantine-Modal-close')][1]").findElement(By.tagName("svg")).click();
+        getDriverWrapper().findElement("//button[contains(@class,'CloseButton-root mantine-Modal-close')][1]").findElement(By.tagName("svg")).click();
         return this;
     }
 

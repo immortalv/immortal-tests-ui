@@ -12,13 +12,13 @@ public class ImmortalHomePage extends ImmortalBasePage {
 
     public ImmortalCreateProfilePage clickSaveMemory() {
         info("Click Save Memory");
-        driverWrapper.clickElement(SAVE_MEMORY_BUTTON);
+        getDriverWrapper().clickElement(SAVE_MEMORY_BUTTON);
         return pageFactory.getCreateProfilePage();
     }
 
     public ImmortalProfilesPage clickSeeProfiles() {
         info("Click See Profiles");
-        driverWrapper.clickElement(SEE_PROFILES_BUTTON);
+        getDriverWrapper().clickElement(SEE_PROFILES_BUTTON);
         return pageFactory.getProfilesPage();
     }
 

@@ -4,10 +4,11 @@ import immortlv.automationimmortalv.pages.ImmortalCabinetPage;
 import immortlv.automationimmortalv.pages.ImmortalCreateProfilePage;
 import immortlv.automationimmortalv.pages.ImmortalHomePage;
 import immortlv.automationimmortalv.pages.ImmortalProfilesPage;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
-import static immortlv.automationimmortalv.pages.ImmortalBasePage.openImmortalWebsite;
+import static immortlv.automationimmortalv.pages.ImmortalBasePage.driverWrapper;
 import static immortlv.automationimmortalv.utils.Constants.*;
 import static immortlv.automationimmortalv.utils.LoggerWrapper.info;
 
@@ -17,7 +18,8 @@ public class SmokeSuite extends BasicTestSuite {
 
     @Test
     public void verifyWebsiteAsUnregisteredUser() {
-        ImmortalHomePage homePage = openImmortalWebsite();
+        ImmortalHomePage homePage = new ImmortalHomePage();
+        homePage.openImmortalWebsite();
 
         info("Verify Home page");
         homePage.verifyHeaderIsDisplayed();
@@ -39,7 +41,8 @@ public class SmokeSuite extends BasicTestSuite {
 
     @Test
     public void verifyWebsiteAsRegisteredUser() {
-        ImmortalHomePage homePage = openImmortalWebsite();
+        ImmortalHomePage homePage = new ImmortalHomePage();
+        homePage.openImmortalWebsite();
 
         info("Verify Home page");
         homePage.verifyHeaderIsDisplayed();
@@ -62,7 +65,8 @@ public class SmokeSuite extends BasicTestSuite {
 
     @Test
     public void verifyProfileCreation() {
-        ImmortalHomePage homePage = openImmortalWebsite();
+        ImmortalHomePage homePage = new ImmortalHomePage();
+        homePage.openImmortalWebsite();
 
         homePage.verifyHeaderIsDisplayed();
         homePage.loginAsAUser();
@@ -92,7 +96,8 @@ public class SmokeSuite extends BasicTestSuite {
 
     @Test
     public void verifyProfileEdition() {
-        ImmortalHomePage homePage = openImmortalWebsite();
+        ImmortalHomePage homePage = new ImmortalHomePage();
+        homePage.openImmortalWebsite();
 
         homePage.verifyHeaderIsDisplayed();
         homePage.loginAsAUser();
@@ -127,9 +132,9 @@ public class SmokeSuite extends BasicTestSuite {
     }
 
 
-    @AfterTest
-    public void deleteAllProfilesForUser() {
-
+    @AfterMethod(alwaysRun = true)
+    public void afterTestActions() {
+        driverWrapper.closeAllBrowsers();
     }
 
 }

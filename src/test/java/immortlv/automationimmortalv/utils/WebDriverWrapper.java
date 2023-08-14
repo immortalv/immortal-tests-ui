@@ -1,6 +1,7 @@
 package immortlv.automationimmortalv.utils;
 
 import org.awaitility.Awaitility;
+import org.awaitility.core.ConditionTimeoutException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,16 +20,13 @@ import static immortlv.automationimmortalv.utils.LoggerWrapper.info;
 
 public class WebDriverWrapper {
     private static RemoteWebDriver driver;
-    private static Actions actions;
     private final String SELENIUM_GRID_URL = "http://selenium-hub-chrome:4444/wd/hub";
-
-    public WebDriverWrapper() {
-        driver = getDriver();
-    }
+    private Actions actions;
 
     public RemoteWebDriver getDriver() {
         if (driver == null) {
-            driver = initializeLocalChromeDriver();
+            driver = initializeRemoteChromeDriver(SELENIUM_GRID_URL);
+            driver.manage().deleteAllCookies();
             actions = new Actions(driver);
         }
         return driver;
@@ -37,10 +35,15 @@ public class WebDriverWrapper {
     public WebElement waitForElement(String locator, Integer secondsToWait) {
         debug(String.format("Waiting \"%s\" until element is displayed: \"%s\"", secondsToWait, locator));
         WebElement element;
-        Awaitility.await().pollInterval(500, TimeUnit.MILLISECONDS).atMost(secondsToWait, TimeUnit.SECONDS).ignoreExceptions()
-                .until(() -> driver.findElement(By.xpath(locator)).isDisplayed());
-        element = driver.findElement(By.xpath(locator));
-        return element;
+        try {
+
+            Awaitility.await().pollInterval(500, TimeUnit.MILLISECONDS).atMost(secondsToWait, TimeUnit.SECONDS).ignoreExceptions()
+                    .until(() -> driver.findElement(By.xpath(locator)).isDisplayed());
+            element = driver.findElement(By.xpath(locator));
+            return element;
+        } catch (ConditionTimeoutException e) {
+            throw new RuntimeException("Element is not found: " + locator);
+        }
     }
 
     public WebElement waitForElement(String locator) {
@@ -66,7 +69,6 @@ public class WebDriverWrapper {
         return this;
     }
 
-
     public void openUrl(String url) {
         info("Open URL: " + url);
         getDriver().get(url);
@@ -75,37 +77,7 @@ public class WebDriverWrapper {
     public void closeAllBrowsers() {
         info("Close All drivers sessions");
         getDriver().quit();
-    }
-
-    private RemoteWebDriver initializeLocalChromeDriver() {
-        info("Initializing Local Driver");
-
-        ChromeOptions opt = new ChromeOptions();
-        opt.addArguments("--window-size=1920,1080");
-        opt.addArguments("--ignore-certificate-errors");
-        opt.addArguments("--allow-running-insecure-content");
-
-        // if you need to see it running, uncomment headless mod
-//        opt.addArguments("--headless");
-
-        Map<String, Object> prefs = new HashMap<String, Object>();
-        opt.setExperimentalOption("prefs", prefs);
-
-        return new ChromeDriver(opt);
-    }
-
-
-    private RemoteWebDriver initializeRemoteChromeDriver(String seleniumHubUrl) {
-        info("Initializing Remote Driver by URL: " + seleniumHubUrl);
-        ChromeOptions options = new ChromeOptions();
-//        waitForSeleniumHubToBeAccesable(seleniumHubUrl);
-        URL url = null;
-        try {
-            url = new URL(seleniumHubUrl);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(String.format("Error while createing url for: \"%s\"", seleniumHubUrl));
-        }
-        return new RemoteWebDriver(url, options);
+        driver = null;
     }
 
     private void waitForSeleniumHubToBeAccesable(String seleniumHubUrl) {
@@ -117,5 +89,40 @@ public class WebDriverWrapper {
                 return false;
             }
         });
+    }
+
+    private static RemoteWebDriver initializeLocalChromeDriver() {
+        info("Initializing Local Driver");
+
+        ChromeOptions opt = new ChromeOptions();
+        opt.addArguments("--window-size=1920,1080");
+        opt.addArguments("--ignore-certificate-errors");
+        opt.addArguments("--allow-running-insecure-content");
+        opt.addArguments("--incognito");
+
+        // if you need to see it running, uncomment headless mod
+//        opt.addArguments("--headless");
+
+        Map<String, Object> prefs = new HashMap<String, Object>();
+        opt.setExperimentalOption("prefs", prefs);
+
+        return new ChromeDriver(opt);
+    }
+
+    private static RemoteWebDriver initializeRemoteChromeDriver(String seleniumHubUrl) {
+        info("Initializing Remote Driver by URL: " + seleniumHubUrl);
+        ChromeOptions opt = new ChromeOptions();
+        opt.addArguments("--window-size=1920,1080");
+        opt.addArguments("--ignore-certificate-errors");
+        opt.addArguments("--allow-running-insecure-content");
+        opt.addArguments("--incognito");
+//        waitForSeleniumHubToBeAccesable(seleniumHubUrl);
+        URL url = null;
+        try {
+            url = new URL(seleniumHubUrl);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(String.format("Error while createing url for: \"%s\"", seleniumHubUrl));
+        }
+        return new RemoteWebDriver(url, opt);
     }
 }
