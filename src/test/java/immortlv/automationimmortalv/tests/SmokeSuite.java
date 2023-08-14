@@ -85,7 +85,7 @@ public class SmokeSuite extends BasicTestSuite {
 
         ImmortalCabinetPage cabinetPage = createProfilePage.clickSaveButton();
         cabinetPage.closeProfileCreatedModal();
-        cabinetPage.verifyProfileIsCreated(PROFILE_USER_FULL_NAME);
+        cabinetPage.verifyProfileIsCreated(PROFILE_USER_FULL_NAME + "sdfsdf");
 
         cabinetPage.deleteProfile(PROFILE_USER_FULL_NAME);
     }
