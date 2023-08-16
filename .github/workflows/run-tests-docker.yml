@@ -25,7 +25,7 @@ jobs:
           docker-compose up tests
           exit_code=$(docker inspect -f '{{.State.ExitCode}}' tests)
           echo $exit_code
-          if [ $TEST_EXIT_CODE -ne 0 ]; then
+          if [ $exit_code != 0 ]; then
             echo "Tests failed"
             exit $TEST_EXIT_CODE
           fi
