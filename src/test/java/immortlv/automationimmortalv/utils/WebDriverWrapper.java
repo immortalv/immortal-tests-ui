@@ -1,5 +1,6 @@
 package immortlv.automationimmortalv.utils;
 
+import immortlv.automationimmortalv.exceptions.RemoteBrowserException;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ConditionTimeoutException;
 import org.openqa.selenium.By;
@@ -10,6 +11,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,15 +20,72 @@ import java.util.concurrent.TimeUnit;
 
 import static immortlv.automationimmortalv.utils.LoggerWrapper.debug;
 import static immortlv.automationimmortalv.utils.LoggerWrapper.info;
+import static immortlv.automationimmortalv.utils.WaiterWrapper.implicitWait;
 
 public class WebDriverWrapper {
     private static RemoteWebDriver driver;
-    private final String SELENIUM_GRID_URL = "http://selenium-hub-chrome:4444/wd/hub";
+    private final String SELENIUM_GRID_URL_API = "http://selenium:4444/wd/hub";
+    private final String SELENIUM_GRID_URL_UI = "http://selenium:4444/ui";
     private Actions actions;
+
+    private static void waitForSeleniumHubToBeAccesable(String seleniumHubUrl) {
+        Awaitility.await().atMost(30, TimeUnit.SECONDS).pollInterval(2, TimeUnit.SECONDS).ignoreExceptions().until(() -> {
+            try {
+                new URL(seleniumHubUrl);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        });
+    }
+
+    private static RemoteWebDriver initializeLocalChromeDriver() {
+        info("Initializing Local Driver");
+
+        ChromeOptions opt = new ChromeOptions();
+        opt.addArguments("--window-size=1920,1080");
+        opt.addArguments("--ignore-ssl-errors=yes");
+        opt.addArguments("--ignore-certificate-errors");
+        opt.addArguments("--allow-running-insecure-content");
+        opt.addArguments("--incognito");
+
+        // if you need to see it running, uncomment headless mod
+//        opt.addArguments("--headless");
+
+        Map<String, Object> prefs = new HashMap<String, Object>();
+        opt.setExperimentalOption("prefs", prefs);
+
+        return new ChromeDriver(opt);
+    }
+
+    private static RemoteWebDriver initializeRemoteChromeDriver(String seleniumHubUrl) {
+        info("Initializing Remote Driver by URL: " + seleniumHubUrl);
+        implicitWait(10, "Waiting until Remote Selenium Hub is started");
+        ChromeOptions opt = new ChromeOptions();
+        opt.addArguments("--window-size=1920,1080");
+        opt.addArguments("--ignore-ssl-errors=yes");
+        opt.addArguments("--ignore-certificate-errors");
+        opt.addArguments("--allow-running-insecure-content");
+        opt.addArguments("--incognito");
+        info("Added browser arguments");
+        URL url = null;
+        try {
+            info("Try to create URL");
+            url = new URI(seleniumHubUrl).toURL();
+        } catch (Throwable e) {
+            info("Got a problem while creating URL: " + e);
+            throw new RuntimeException(String.format("Error while creating url for: \"%s\"", seleniumHubUrl));
+        }
+        try {
+            return new RemoteWebDriver(url, opt);
+        } catch (Error | Exception e) {
+            throw new RemoteBrowserException(String.format("Error while creating RemoteDriver for: URL: \"%s\", ", seleniumHubUrl));
+        }
+    }
 
     public RemoteWebDriver getDriver() {
         if (driver == null) {
-            driver = initializeRemoteChromeDriver(SELENIUM_GRID_URL);
+            driver = initializeRemoteChromeDriver(SELENIUM_GRID_URL_API);
             driver.manage().deleteAllCookies();
             actions = new Actions(driver);
         }
@@ -78,51 +138,5 @@ public class WebDriverWrapper {
         info("Close All drivers sessions");
         getDriver().quit();
         driver = null;
-    }
-
-    private void waitForSeleniumHubToBeAccesable(String seleniumHubUrl) {
-        Awaitility.await().atMost(30, TimeUnit.SECONDS).pollInterval(2, TimeUnit.SECONDS).ignoreExceptions().until(() -> {
-            try {
-                new URL(seleniumHubUrl);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        });
-    }
-
-    private static RemoteWebDriver initializeLocalChromeDriver() {
-        info("Initializing Local Driver");
-
-        ChromeOptions opt = new ChromeOptions();
-        opt.addArguments("--window-size=1920,1080");
-        opt.addArguments("--ignore-certificate-errors");
-        opt.addArguments("--allow-running-insecure-content");
-        opt.addArguments("--incognito");
-
-        // if you need to see it running, uncomment headless mod
-//        opt.addArguments("--headless");
-
-        Map<String, Object> prefs = new HashMap<String, Object>();
-        opt.setExperimentalOption("prefs", prefs);
-
-        return new ChromeDriver(opt);
-    }
-
-    private static RemoteWebDriver initializeRemoteChromeDriver(String seleniumHubUrl) {
-        info("Initializing Remote Driver by URL: " + seleniumHubUrl);
-        ChromeOptions opt = new ChromeOptions();
-        opt.addArguments("--window-size=1920,1080");
-        opt.addArguments("--ignore-certificate-errors");
-        opt.addArguments("--allow-running-insecure-content");
-        opt.addArguments("--incognito");
-//        waitForSeleniumHubToBeAccesable(seleniumHubUrl);
-        URL url = null;
-        try {
-            url = new URL(seleniumHubUrl);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(String.format("Error while createing url for: \"%s\"", seleniumHubUrl));
-        }
-        return new RemoteWebDriver(url, opt);
     }
 }

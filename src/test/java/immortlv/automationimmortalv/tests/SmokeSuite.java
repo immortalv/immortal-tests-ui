@@ -5,7 +5,6 @@ import immortlv.automationimmortalv.pages.ImmortalCreateProfilePage;
 import immortlv.automationimmortalv.pages.ImmortalHomePage;
 import immortlv.automationimmortalv.pages.ImmortalProfilesPage;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 import static immortlv.automationimmortalv.pages.ImmortalBasePage.driverWrapper;
