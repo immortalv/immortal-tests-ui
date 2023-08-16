@@ -31,9 +31,6 @@ jobs:
           echo "Tests failed!"
           fi
 
-      - name: Close Containers
-        run: docker-compose down
-
       - name: Send Slack Notification
         run: |
           if [ $(docker inspect -f '{{.State.ExitCode}}' tests) == 0 ]; then
@@ -43,3 +40,6 @@ jobs:
             status="Failure"
             message="Tests failed! Workflow has completed with failures."
           fi
+
+      - name: Close Containers
+        run: docker-compose down
