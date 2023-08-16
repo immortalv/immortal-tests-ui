@@ -23,7 +23,7 @@ jobs:
         id: tests
         run: |
           docker-compose up tests
-          exit_code=docker inspect -f '{{.State.ExitCode}}' tests
+          exit_code=$(docker inspect -f '{{.State.ExitCode}}' $container_id)
           echo $exit_code
           if [ $exit_code -eq 0 ]; then
           echo "Tests passed!"
