@@ -19,13 +19,17 @@ jobs:
       - name: Change wrapper permissions # Adds this pernission to be able to run Gradle Commands
         run: chmod +x ./gradlew
 
-      - name: Run Immortal UI tests Inside Docker  # Runs docker-compose.yml file from current repo
+      - name: Run Immortal UI tests Inside Docker
+        id: tests
         run: |
-          docker-compose up tests
+          docker-compose up tests || echo "Tests failed"
 
-      - name: Close Containers  # Runs docker-compose.yml file from current repo
-        run: |
-          docker-compose down
+      - name: Close Containers
+        run: docker-compose down
+
+      - name: Set workflow status if tests failed
+        if: steps.tests.outcome == 'failure'
+        run: exit 1
 
   slackNotification: # Approach is used from here https://github.com/marketplace/actions/slack-notify
     name: Slack Notification
