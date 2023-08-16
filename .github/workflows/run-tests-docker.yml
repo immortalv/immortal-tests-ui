@@ -26,16 +26,31 @@ jobs:
           exit_code=$(docker inspect -f '{{.State.ExitCode}}' tests)
           echo $exit_code
 
-      - name: Send Slack Notification
+      - name: Send Slack Success Notification
         uses: rtCamp/action-slack-notify@v2
+        if: ${{ $(docker inspect -f '{{.State.ExitCode}}' tests) ==0 }}
         env:
           SLACK_CHANNEL: general
-          SLACK_COLOR: ${{ $(docker inspect -f '{{.State.ExitCode}}' tests) }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_COLOR: 'bad' # or a specific color like 'good' or '#ff00ff'
           SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: $(docker inspect -f '{{.State.ExitCode}}' tests)
+          SLACK_MESSAGE: 'Tests PASSED'
           SLACK_TITLE: Post Title
           SLACK_USERNAME: ImmortalAutomation
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+
+      - name: Send Slack Failure Notification
+        uses: rtCamp/action-slack-notify@v2
+        if: ${{ $(docker inspect -f '{{.State.ExitCode}}' tests) ==1 }}
+        env:
+          SLACK_CHANNEL: general
+          SLACK_COLOR: 'good' # or a specific color like 'good' or '#ff00ff'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Tests FAILED''
+          SLACK_TITLE: Post Title
+          SLACK_USERNAME: ImmortalAutomation
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
 
       - name: Close Containers
         run: docker-compose down
