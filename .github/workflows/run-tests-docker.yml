@@ -28,24 +28,11 @@ jobs:
 
       - name: Send Slack Notification
         uses: rtCamp/action-slack-notify@v2
-        run: |
-          exit_code=$(docker inspect -f '{{.State.ExitCode}}' tests)
-          
-          echo $exit_code
-          if [ exit_code == 0 ]; then
-            status="Success"
-            message="Tests passed! Workflow has completed successfully."
-          fi
-          
-          if [ exit_code == 1 ]; then
-            status="Failure"
-            message="Tests failed! Workflow has completed with failures."
-          fi
         env:
           SLACK_CHANNEL: general
-          SLACK_COLOR: $status
+          SLACK_COLOR: ${{ $(docker inspect -f '{{.State.ExitCode}}' tests) }} # or a specific color like 'good' or '#ff00ff'
           SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: $message
+          SLACK_MESSAGE: $(docker inspect -f '{{.State.ExitCode}}' tests)
           SLACK_TITLE: Post Title
           SLACK_USERNAME: ImmortalAutomation
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
