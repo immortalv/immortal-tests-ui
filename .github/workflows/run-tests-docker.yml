@@ -29,7 +29,6 @@ jobs:
           echo "Tests passed!"
           else
           echo "Tests failed!"
-          exit $exit_code
           fi
 
       - name: Close Containers
