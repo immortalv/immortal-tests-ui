@@ -27,7 +27,7 @@ jobs:
           echo $exit_code
           if [ $exit_code != 0 ]; then
             echo "Tests failed"
-            exit $TEST_EXIT_CODE
+            exit 1
           fi
 
       - name: Send Slack Success Notification
