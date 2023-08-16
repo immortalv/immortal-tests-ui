@@ -29,10 +29,14 @@ jobs:
       - name: Send Slack Notification
         run: |
           exit_code=$(docker inspect -f '{{.State.ExitCode}}' tests)
+          
+          echo $exit_code
           if [ exit_code == 0 ]; then
             status="Success"
             message="Tests passed! Workflow has completed successfully."
-          else
+          fi
+          
+          if [ exit_code == 1 ]; then
             status="Failure"
             message="Tests failed! Workflow has completed with failures."
           fi
