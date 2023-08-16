@@ -6,6 +6,9 @@ on:
   schedule:
     - cron: '0 0 * * *' # Daily schedule at midnight UTC
 
+env:
+  TEST_EXIT_CODE: 0
+
 jobs:
 
   build:
@@ -25,11 +28,12 @@ jobs:
           docker-compose up tests
           exit_code=$(docker inspect -f '{{.State.ExitCode}}' tests)
           echo $exit_code
-          echo "::set-output name=exit_code::$exit_code" # Set the exit code as an output
           if [ $exit_code -eq 0 ]; then
           echo "Tests passed!"
+          echo "::set-env name=NEW_VARIABLE::0"
           else
           echo "Tests failed!"
+          echo "::set-env name=NEW_VARIABLE::1"
           fi
 
       - name: Close Containers
@@ -38,10 +42,10 @@ jobs:
   slackNotification: # Approach is used from here https://github.com/marketplace/actions/slack-notify
     name: Slack Notification
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [ build ]
     steps:
       - name: Send Slack Notification on Success
-        if: ${{ needs.build.outputs.tests_exit_code == '0' }}
+        if: ${{ $TEST_EXIT_CODE == '0' }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: ImmortalProdTests
@@ -51,7 +55,7 @@ jobs:
           message: 'Tests passed! Workflow has completed successfully.'
 
       - name: Send Slack Notification on Failure
-        if: ${{ needs.build.outputs.tests_exit_code != '0' }}
+        if: ${{ $TEST_EXIT_CODE != '0' }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: ImmortalProdTests
