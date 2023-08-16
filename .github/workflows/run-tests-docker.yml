@@ -41,7 +41,7 @@ jobs:
     needs: [build]
     steps:
       - name: Send Slack Notification on Success
-        if: ${{ $exit_code == 0 }}
+        if: ${{ needs.build.outputs.tests_exit_code == '0' }}
         uses: rtCamp/action-slack-notify@v2
         with:
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
@@ -49,7 +49,7 @@ jobs:
           message: 'Tests passed! Workflow has completed successfully.'
 
       - name: Send Slack Notification on Failure
-        if: ${{ $exit_code == 1 }}
+        if: ${{ needs.build.outputs.tests_exit_code != '0' }}
         uses: rtCamp/action-slack-notify@v2
         with:
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
