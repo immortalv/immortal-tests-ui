@@ -11,6 +11,6 @@ services:
   tests:
     image: tests_image
     container_name: tests
+    depends_on: [selenium]
     build:
       context: .
-    
