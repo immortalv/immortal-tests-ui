@@ -44,22 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
-      - name: Send Slack Notification on Success
-        if: ${{ $TEST_EXIT_CODE == '0' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_USERNAME: ImmortalProdTests
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        with:
-          status: 'Success'
-          message: 'Tests passed! Workflow has completed successfully.'
-
-      - name: Send Slack Notification on Failure
-        if: ${{ $TEST_EXIT_CODE != '0' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_USERNAME: ImmortalProdTests
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        with:
-          status: 'Failure'
-          message: 'Tests failed! Workflow has completed with failures.'
+      - name: Send Slack Notification
+        run:  |
+          if [ $TEST_EXIT_CODE -eq 0 ]; then
+            status="Success"
+            message="Tests passed! Workflow has completed successfully."
+          else
+            status="Failure"
+            message="Tests failed! Workflow has completed with failures."
+          fi
