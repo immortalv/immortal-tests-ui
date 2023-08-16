@@ -25,15 +25,11 @@ jobs:
           docker-compose up tests
           exit_code=$(docker inspect -f '{{.State.ExitCode}}' tests)
           echo $exit_code
-          if [ $exit_code -eq 0 ]; then
-          echo "Tests passed!"
-          else
-          echo "Tests failed!"
-          fi
 
       - name: Send Slack Notification
         run: |
-          if [ $(docker inspect -f '{{.State.ExitCode}}' tests) == 0 ]; then
+          exit_code=$(docker inspect -f '{{.State.ExitCode}}' tests)
+          if [ exit_code == 0 ]; then
             status="Success"
             message="Tests passed! Workflow has completed successfully."
           else
