@@ -34,8 +34,9 @@ public class SmokeSuite extends BasicTestSuite {
         profilesPage.clickLeftPaginationArrow().verifyAllProfilesAreDisplayed();
 
         info("Verify Profiles Searching");
-        profilesPage.searchProfile(PROFILE_NAME+"sdfsdfs");
+        profilesPage.searchProfile(PROFILE_NAME);
         profilesPage.verifyProfileResultsContainsExpectedName(PROFILE_NAME);
+        throw new RuntimeException();
     }
 
 //    @Test
