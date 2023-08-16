@@ -60,7 +60,6 @@ public class WebDriverWrapper {
 
     private static RemoteWebDriver initializeRemoteChromeDriver(String seleniumHubUrl) {
         info("Initializing Remote Driver by URL: " + seleniumHubUrl);
-        implicitWait(10, "Waiting until Remote Selenium Hub is started");
         ChromeOptions opt = new ChromeOptions();
         opt.addArguments("--window-size=1920,1080");
         opt.addArguments("--ignore-ssl-errors=yes");

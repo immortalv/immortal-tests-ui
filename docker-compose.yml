@@ -8,10 +8,9 @@ services:
       - "4444:4444"
     volumes:
       - /dev/shm:/dev/shm
-
-  tests_container:
-    depends_on: [selenium]
+  tests:
     image: tests_image
+    container_name: tests
     build:
       context: .
-    container_name: tests_container
+    

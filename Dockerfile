@@ -7,4 +7,4 @@ WORKDIR /immortal-tests-ui
 # Copy the entire project directory to the container
 COPY . /immortal-tests-ui
 
-RUN gradle test
+CMD ["gradle","test"]
