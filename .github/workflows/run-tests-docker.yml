@@ -34,8 +34,8 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         if: ${{ success() }}
         env:
-          SLACK_CHANNEL: general
-          SLACK_COLOR: 'bad' # or a specific color like 'good' or '#ff00ff'
+          SLACK_CHANNEL: automation-tests
+          SLACK_COLOR: 'good' # or a specific color like 'good' or '#ff00ff'
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_MESSAGE: 'Tests PASSED'
           SLACK_TITLE: Post Title
@@ -47,8 +47,8 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         if: ${{ failure() }}
         env:
-          SLACK_CHANNEL: general
-          SLACK_COLOR: 'good' # or a specific color like 'good' or '#ff00ff'
+          SLACK_CHANNEL: automation-tests
+          SLACK_COLOR: 'bad' # or a specific color like 'good' or '#ff00ff'
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_MESSAGE: 'Tests FAILED'
           SLACK_TITLE: Post Title
