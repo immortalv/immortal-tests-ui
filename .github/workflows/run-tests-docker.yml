@@ -42,15 +42,19 @@ jobs:
       - name: Send Slack Notification on Success
         if: ${{ needs.build.outputs.tests_exit_code == '0' }}
         uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: ImmortalProdTests
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         with:
-          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           status: 'Success'
           message: 'Tests passed! Workflow has completed successfully.'
 
       - name: Send Slack Notification on Failure
         if: ${{ needs.build.outputs.tests_exit_code != '0' }}
         uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: ImmortalProdTests
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         with:
-          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           status: 'Failure'
           message: 'Tests failed! Workflow has completed with failures.'
