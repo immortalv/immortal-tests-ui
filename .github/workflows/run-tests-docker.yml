@@ -23,13 +23,13 @@ jobs:
         id: tests
         run: |
           docker-compose up tests
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "Tests failed"
+            exit $TEST_EXIT_CODE
+          fi
 
       - name: Close Containers
         run: docker-compose down
-
-      - name: Set workflow status if tests failed
-        if: steps.tests.outcome == 'failure'
-        run: exit 1
 
   slackNotification: # Approach is used from here https://github.com/marketplace/actions/slack-notify
     name: Slack Notification

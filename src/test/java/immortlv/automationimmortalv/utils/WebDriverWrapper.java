@@ -28,16 +28,7 @@ public class WebDriverWrapper {
     private final String SELENIUM_GRID_URL_UI = "http://selenium:4444/ui";
     private Actions actions;
 
-    private static void waitForSeleniumHubToBeAccesable(String seleniumHubUrl) {
-        Awaitility.await().atMost(30, TimeUnit.SECONDS).pollInterval(2, TimeUnit.SECONDS).ignoreExceptions().until(() -> {
-            try {
-                new URL(seleniumHubUrl);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        });
-    }
+
 
     private static RemoteWebDriver initializeLocalChromeDriver() {
         info("Initializing Local Driver");
@@ -60,7 +51,7 @@ public class WebDriverWrapper {
 
     private static RemoteWebDriver initializeRemoteChromeDriver(String seleniumHubUrl) {
         info("Initializing Remote Driver by URL: " + seleniumHubUrl);
-        implicitWait(10, "Waiting until Remote Selenium Hub is started");
+        waitForSeleniumHubToBeAccesable(seleniumHubUrl);
         ChromeOptions opt = new ChromeOptions();
         opt.addArguments("--window-size=1920,1080");
         opt.addArguments("--ignore-ssl-errors=yes");
@@ -138,5 +129,17 @@ public class WebDriverWrapper {
         info("Close All drivers sessions");
         getDriver().quit();
         driver = null;
+    }
+
+    private static void waitForSeleniumHubToBeAccesable(String seleniumHubUrl) {
+        info("Wait For SeleniumHub To Be Accesable");
+        Awaitility.await().atMost(30, TimeUnit.SECONDS).pollInterval(2, TimeUnit.SECONDS).ignoreExceptions().until(() -> {
+            try {
+                new URL(seleniumHubUrl);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 }
